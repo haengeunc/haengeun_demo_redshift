@@ -125,21 +125,6 @@ view: users {
       order_items.count
     ]
   }
+
+
 }
-
-
-
-
-
-#-------SOLUTION---------
-
-# dimension: days_since_signup {
-#   type: number
-#   sql:  DATEDIFF(day, ${created_date}, current_date) ;;
-# }
-
-# dimension: is_new_customer {
-#   description: "New customer (yes) if sign up less than 90 days (inclusive)"
-#   type: yesno
-#   sql: ${days_since_signup} <= 90  ;;
-# }
