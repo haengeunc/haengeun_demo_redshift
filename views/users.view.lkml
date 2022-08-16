@@ -125,21 +125,41 @@ view: users {
       order_items.count
     ]
   }
+
+
+
+
+
+
+    #-------SOLUTION---------
+
+    dimension: days_since_signup {
+      type: number
+      sql:  DATEDIFF(day, ${created_date}, current_date) ;;
+    }
+
+    dimension: is_new_customer {
+      description: "New customer (yes) if sign up less than 90 days (inclusive)"
+      type: yesno
+      sql: ${days_since_signup} <= 90  ;;
+    }
+
+      dimension: days_since_signup_tier {
+        type: tier
+        sql: ${days_since_signup} ;;
+        tiers: [0, 30, 90, 180, 360, 720]
+        style: integer
+      }
+
+      #note day interval would create the same dimension as days_since_signup
+      dimension_group: since_signup {
+        type: duration
+        intervals: [week, month, quarter, year]
+        sql_start: ${TABLE}.created_date ;;
+        sql_end: current_date;;
+      }
+
+
+
+
 }
-
-
-
-
-
-#-------SOLUTION---------
-
-# dimension: days_since_signup {
-#   type: number
-#   sql:  DATEDIFF(day, ${created_date}, current_date) ;;
-# }
-
-# dimension: is_new_customer {
-#   description: "New customer (yes) if sign up less than 90 days (inclusive)"
-#   type: yesno
-#   sql: ${days_since_signup} <= 90  ;;
-# }
